@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -46,6 +47,29 @@ public class ProdutoResource {
     
         return Response.status(Status.CREATED).build();
 
+    }
+
+
+
+    @PUT
+    @Path("{id}")
+    @Transactional
+    public Response atualizarProduto(@PathParam("id") Long id, ProdutoDTO produtoDTO){
+        var product = Produto.findByIdOptional(id);
+
+        if(product.isEmpty()){
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
+
+        Produto produto = (Produto) product.get();
+        produto.setNome(produtoDTO.getNome());
+        produto.setValor(produtoDTO.getValor());
+
+        produto.persist();
+
+        return Response.noContent().build();
+        
     }
 
 
