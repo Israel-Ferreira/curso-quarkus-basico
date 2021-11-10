@@ -30,6 +30,7 @@ public class ProdutoResource {
     }
 
 
+
     @POST
     @Transactional
     public Response criarProduto(ProdutoDTO produtoDTO){
@@ -47,6 +48,22 @@ public class ProdutoResource {
     
         return Response.status(Status.CREATED).build();
 
+    }
+
+
+    @GET
+    @Path("{id}")
+    public Response buscarProdutoPorId(@PathParam("id") Long id){
+        var optProduct = Produto.findByIdOptional(id);
+
+        if(optProduct.isEmpty()){
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
+
+        Produto product = (Produto) optProduct.get();
+        
+        return Response.ok(product).build();
     }
 
 
